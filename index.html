@@ -3,41 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Project Shankara</title>
+    <title>Project Shankara - Paint World</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap');
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700&display=swap');
 
         :root {
-            --pink-main: #ff6fa8;
-            --pink-soft: #ffd1e4;
-            --pink-deep: #e04584;
-            --white-soft: #fdf7fb;
-            --dark-text: #2b2030;
+            /* Palette: Colorful & Fun */
+            --c-red: #FF595E;
+            --c-yellow: #FFCA3A;
+            --c-green: #8AC926;
+            --c-blue: #1982C4;
+            --c-purple: #6A4C93;
+            --white-soft: #ffffff;
+            --dark-text: #2d3436;
         }
 
         * { box-sizing: border-box; }
 
         body {
-            font-family: 'Poppins', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            font-family: 'Nunito', sans-serif;
             min-height: 100vh;
-            background:
-                radial-gradient(circle at top left, rgba(255, 182, 212, 0.9), transparent 55%),
-                radial-gradient(circle at bottom right, rgba(255, 255, 255, 0.9), transparent 55%),
-                linear-gradient(135deg, #ffe4f0 0%, #ffffff 30%, #ffd6ea 100%);
+            background-color: #f0f8ff;
+            /* Canvas-like background with splashes */
+            background-image:
+                radial-gradient(circle at 10% 20%, rgba(255, 89, 94, 0.15) 0%, transparent 25%),
+                radial-gradient(circle at 90% 80%, rgba(25, 130, 196, 0.15) 0%, transparent 25%),
+                radial-gradient(circle at 50% 50%, rgba(255, 202, 58, 0.15) 0%, transparent 30%),
+                radial-gradient(circle at 20% 90%, rgba(138, 201, 38, 0.15) 0%, transparent 20%);
             padding: 24px 12px 32px;
             color: var(--dark-text);
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>'), auto;
+            overflow-x: hidden;
         }
 
+        /* Hides default cursor to emphasize custom effects if desired,
+           but generally keeping a visible cursor is better for UX.
+           We rely on the 'paint-drop' trail for the effect. */
+
         .app-shell {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(9px);
-            border-radius: 26px;
-            box-shadow: 0 18px 40px rgba(230, 90, 150, 0.25);
-            border: 1px solid rgba(255, 182, 212, 0.8);
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            border-radius: 30px;
+            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.1);
+            border: 4px solid #ffffff;
             padding: 24px 18px 20px;
+            position: relative;
+            z-index: 10;
         }
 
         .fade-transition { transition: opacity 0.4s ease; }
@@ -54,61 +67,71 @@
 
         .welcome-tag {
             letter-spacing: 0.25em;
-            font-size: 0.75rem;
+            font-size: 0.85rem;
+            font-weight: 800;
             text-transform: uppercase;
-            color: #a74f82;
+            color: var(--c-purple);
+            margin-bottom: 0.5rem;
+            background: #fff;
+            padding: 4px 12px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(106, 76, 147, 0.2);
         }
 
         .welcome-title {
-            font-family: 'Roboto Mono', monospace;
-            font-size: 2.15rem;
-            font-weight: 700;
-            line-height: 1.2;
-            margin-top: 0.75rem;
-            margin-bottom: 0.3rem;
-            color: #3b2236;
+            font-family: 'Fredoka One', cursive;
+            font-size: 2.5rem;
+            line-height: 1.1;
+            margin-top: 0.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--c-blue);
+            text-shadow: 3px 3px 0px rgba(25, 130, 196, 0.2);
         }
 
         .welcome-sub {
-            font-size: 0.95rem;
-            color: #7c4c6a;
+            font-size: 1.1rem;
+            color: var(--dark-text);
+            font-weight: 600;
         }
 
         #start-btn {
-            margin-top: 1.9rem;
-            padding: 0.9rem 3rem;
+            margin-top: 2rem;
+            padding: 1rem 3rem;
             border-radius: 999px;
             border: none;
-            font-weight: 700;
-            font-size: 0.9rem;
-            letter-spacing: 0.16em;
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.2rem;
+            letter-spacing: 0.05em;
             text-transform: uppercase;
             cursor: pointer;
-            background-image: linear-gradient(135deg, #ff6fa8 0%, #ff94c1 45%, #ff6fa8 100%);
-            background-size: 200% auto;
+            /* Rainbow Gradient */
+            background: linear-gradient(90deg, var(--c-red), var(--c-yellow), var(--c-green), var(--c-blue), var(--c-purple));
+            background-size: 300% 100%;
             color: white;
-            box-shadow: 0 10px 25px rgba(226, 84, 145, 0.55);
-            transition:
-                background-position 0.4s ease,
-                transform 0.16s ease,
-                box-shadow 0.16s ease;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            animation: rainbowMove 3s linear infinite;
+        }
+
+        @keyframes rainbowMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
         #start-btn:hover {
-            background-position: right center;
-            transform: translateY(-1px);
-            box-shadow: 0 14px 30px rgba(226, 84, 145, 0.65);
+            transform: scale(1.05) rotate(-2deg);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
         }
 
         #start-btn:active {
-            transform: translateY(1px) scale(0.98);
-            box-shadow: 0 6px 16px rgba(226, 84, 145, 0.45);
+            transform: scale(0.95);
         }
 
         /* MAIN HEADER */
         .main-header {
             text-align: center;
-            margin-bottom: 0.9rem;
+            margin-bottom: 1.5rem;
             position: relative;
             z-index: 10;
         }
@@ -117,86 +140,87 @@
             display: inline-flex;
             align-items: center;
             gap: 0.35rem;
-            font-size: 0.72rem;
+            font-size: 0.8rem;
+            font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 0.18em;
-            padding: 0.32rem 0.9rem;
+            letter-spacing: 0.1em;
+            padding: 0.4rem 1.2rem;
             border-radius: 999px;
-            background: rgba(255, 182, 212, 0.35);
-            border: 1px solid rgba(255, 143, 194, 0.95);
-            color: #a74f82;
+            background: var(--c-yellow);
+            color: #fff;
+            box-shadow: 0 4px 0 #e6b000;
             margin-bottom: 0.5rem;
+            transform: rotate(-1deg);
         }
 
         .main-title {
-            font-family: 'Roboto Mono', monospace;
-            font-size: 1.55rem;
-            font-weight: 700;
-            color: #3a2237;
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.8rem;
+            color: var(--c-red);
+            text-shadow: 2px 2px 0px rgba(255, 89, 94, 0.2);
         }
 
         .daily-affirmation {
-            font-family: 'Poppins', sans-serif;
-            font-size: 0.9rem;
-            color: #a05c7b;
-            font-style: italic;
-            margin: 0.2rem auto 0.5rem;
-            max-width: 80%;
+            font-family: 'Nunito', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--c-purple);
+            background: #f3e5f5;
+            padding: 8px 16px;
+            border-radius: 12px;
+            display: inline-block;
+            margin: 0.5rem auto;
+            max-width: 90%;
             line-height: 1.4;
+            transform: rotate(1deg);
         }
 
         .datetime-wrapper {
             display: flex;
             justify-content: center;
-            margin-top: 0.4rem;
+            margin-top: 0.5rem;
             margin-bottom: 1rem;
         }
 
         .datetime {
-            font-size: 0.8rem;
-            color: #7e5872;
-            font-weight: 500;
-            background: #ffeaf4;
+            font-size: 0.9rem;
+            color: #fff;
+            font-weight: 700;
+            background: var(--c-blue);
             border-radius: 999px;
-            padding: 0.43rem 1.2rem;
+            padding: 0.5rem 1.5rem;
             display: inline-flex;
             align-items: center;
-            gap: 0.35rem;
+            gap: 0.5rem;
+            box-shadow: 0 4px 0 #106ba3;
         }
 
         .clock-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 999px;
-            background: var(--pink-main);
-            box-shadow: 0 0 0 4px rgba(255, 155, 201, 0.35);
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--c-yellow);
+            border: 2px solid #fff;
         }
 
         .top-actions {
             display: flex;
-            justify-content: flex-start;
+            justify-content: center;
             align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 0.6rem;
-            flex-wrap: wrap;
+            margin-bottom: 1rem;
         }
 
         .info-text {
-            font-size: 0.78rem;
-            color: #8b637e;
-            display: flex;
-            align-items: center;
-            gap: 0.35rem;
+            font-size: 0.85rem;
+            color: var(--dark-text);
+            font-weight: 600;
+            background: #e0f7fa;
+            padding: 6px 14px;
+            border-radius: 20px;
+            border: 2px dashed var(--c-blue);
         }
 
-        .info-dot {
-            width: 6px;
-            height: 6px;
-            border-radius: 999px;
-            background: var(--pink-deep);
-        }
-
-        /* TOMBOL EDIT USER DI POJOK KANAN ATAS (FIXED) */
+        /* EDIT BUTTON */
         #edit-users-btn {
             position: fixed;
             top: 12px;
@@ -205,200 +229,176 @@
             border-radius: 999px;
             border: none;
             padding: 0.5rem 1.1rem;
-            font-size: 0.78rem;
-            font-weight: 600;
+            font-size: 0.8rem;
+            font-weight: 700;
             color: #fff;
-            background: linear-gradient(135deg, #ff6fa8, #ff93c0);
+            background: var(--c-green);
             display: inline-flex;
             align-items: center;
-            gap: 0.3rem;
+            gap: 0.4rem;
             cursor: pointer;
-            box-shadow: 0 7px 16px rgba(213, 83, 137, 0.4);
+            box-shadow: 0 4px 0 #6aa315;
+            transition: transform 0.1s;
         }
 
-        #edit-users-btn:hover {
-            filter: brightness(1.05);
-            transform: translateY(-1px);
-            box-shadow: 0 10px 20px rgba(213, 83, 137, 0.5);
+        #edit-users-btn:active {
+            transform: translateY(4px);
+            box-shadow: 0 0 0 #6aa315;
         }
 
         .edit-btn-icon {
-            width: 16px;
-            height: 16px;
-            border-radius: 999px;
-            background: rgba(255,255,255,0.9);
-            color: #e04584;
-            font-size: 0.7rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            font-size: 1rem;
         }
 
         /* GRID USER */
         .users-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 0.9rem;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 1rem;
             margin-top: 0.6rem;
             margin-bottom: 0.2rem;
             max-height: calc(100vh - 270px);
             overflow-y: auto;
-            padding-right: 4px;
+            padding: 10px;
         }
 
-        .users-grid::-webkit-scrollbar { width: 6px; }
+        .users-grid::-webkit-scrollbar { width: 8px; }
         .users-grid::-webkit-scrollbar-track {
-            background: #ffe6f2;
-            border-radius: 999px;
+            background: #f1f1f1;
+            border-radius: 10px;
         }
         .users-grid::-webkit-scrollbar-thumb {
-            background: #ff9cc7;
-            border-radius: 999px;
+            background: var(--c-blue);
+            border-radius: 10px;
+            border: 2px solid #f1f1f1;
         }
 
-        /* KARTU USER – DESAIN + ANIMASI */
+        /* USER CARD */
         .user-card {
             position: relative;
-            border-radius: 18px;
-            padding: 0.75rem 0.8rem;
-            background: radial-gradient(circle at top left, #ffbfdc, #ff8bbf);
-            border: 1px solid rgba(255, 255, 255, 0.9);
-            color: #3a1123;
+            border-radius: 20px;
+            padding: 1rem;
+            background: #fff;
+            border: 3px solid transparent;
+            color: var(--dark-text);
             cursor: pointer;
             display: flex;
             flex-direction: column;
             align-items: flex-start;
             justify-content: space-between;
-            min-height: 86px;
+            min-height: 110px;
             overflow: hidden;
 
-            /* animasi utama */
+            box-shadow: 0 8px 0 rgba(0,0,0,0.1);
+            transition: all 0.2s ease;
+
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
             opacity: 0;
-            transform: translateY(18px) scale(0.97);
-            box-shadow: 0 9px 18px rgba(225,103,157,0.40);
-            transition: transform 0.16s ease, box-shadow 0.16s ease;
-
-            animation-name: popIn, floatGlow;
-            animation-duration: 0.45s, 3.2s;
-            animation-timing-function: ease, ease-in-out;
-            animation-fill-mode: forwards, both;
-            animation-iteration-count: 1, infinite;
-            animation-delay: var(--stagger, 0s), 0.6s;
+            transform: scale(0.8);
+            animation-delay: var(--stagger, 0s);
         }
 
-        .user-card::before {
-            content: "";
-            position: absolute;
-            width: 120%;
-            height: 120%;
-            top: -60%;
-            right: -40%;
-            background: radial-gradient(circle, rgba(255,255,255,0.5), transparent 60%);
-            opacity: 0.7;
-            pointer-events: none;
-        }
+        /* Individual Card Colors via nth-child */
+        .user-card:nth-child(5n+1) { border-color: var(--c-red); background: #ffebee; }
+        .user-card:nth-child(5n+2) { border-color: var(--c-yellow); background: #fffde7; }
+        .user-card:nth-child(5n+3) { border-color: var(--c-green); background: #f1f8e9; }
+        .user-card:nth-child(5n+4) { border-color: var(--c-blue); background: #e3f2fd; }
+        .user-card:nth-child(5n+5) { border-color: var(--c-purple); background: #f3e5f5; }
 
-        /* RIPPLE CLICK */
-        .user-card::after {
-            content: "";
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            width: 10px;
-            height: 10px;
-            background: rgba(255,255,255,0.75);
-            border-radius: 999px;
-            transform: translate(-50%, -50%) scale(0);
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .user-card:active::after {
-            animation: ripple 0.5s ease-out;
-        }
-
-        /* HOVER GLOW */
         .user-card:hover {
-            transform: translateY(-3px) scale(1.01);
-            box-shadow:
-                0 13px 26px rgba(225, 103, 157, 0.55),
-                0 0 18px rgba(255, 120, 180, 0.55),
-                0 0 28px rgba(255, 160, 200, 0.45);
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 12px 0 rgba(0,0,0,0.1);
         }
 
         .user-card:active {
-            transform: translateY(1px) scale(0.99);
-            box-shadow: 0 6px 13px rgba(225, 103, 157, 0.38);
+            transform: translateY(0px) scale(0.98);
+            box-shadow: 0 2px 0 rgba(0,0,0,0.1);
         }
 
         .user-card-header {
             display: flex;
             width: 100%;
             justify-content: space-between;
-            align-items: center;
-            margin-bottom: 0.2rem;
+            align-items: flex-start;
+            margin-bottom: 0.5rem;
         }
 
         .user-badge {
-            width: 32px;
-            height: 32px;
-            border-radius: 999px;
-            background: rgba(255, 255, 255, 0.9);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #fff;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.7rem;
-            font-weight: 700;
-            color: #e04584;
-            box-shadow: 0 2px 6px rgba(204, 63, 129, 0.35);
+            font-size: 0.9rem;
+            font-weight: 800;
+            box-shadow: 0 4px 0 rgba(0,0,0,0.1);
+            border: 2px solid currentColor;
         }
 
+        .user-card:nth-child(5n+1) .user-badge { color: var(--c-red); }
+        .user-card:nth-child(5n+2) .user-badge { color: var(--c-yellow); }
+        .user-card:nth-child(5n+3) .user-badge { color: var(--c-green); }
+        .user-card:nth-child(5n+4) .user-badge { color: var(--c-blue); }
+        .user-card:nth-child(5n+5) .user-badge { color: var(--c-purple); }
+
         .user-name {
-            font-weight: 700;
-            font-size: 0.95rem;
-            max-width: 80px;
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.1rem;
+            color: var(--dark-text);
+            line-height: 1.1;
+            text-align: right;
         }
 
         .user-sub {
-            font-size: 0.7rem;
-            color: #5f2241;
-            opacity: 0.9;
+            font-size: 0.75rem;
+            color: #666;
+            text-align: right;
+            font-weight: 600;
         }
 
         .user-pill {
-            margin-top: 0.3rem;
-            font-size: 0.7rem;
-            padding: 0.2rem 0.55rem;
+            margin-top: auto;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 0.3rem 0.8rem;
             border-radius: 999px;
-            border: 1px dashed rgba(255, 255, 255, 0.9);
-            background: linear-gradient(90deg, rgba(255,255,255,0.65), rgba(255,255,255,0.35));
+            background: #fff;
             display: inline-flex;
             align-items: center;
             gap: 0.3rem;
+            box-shadow: 0 2px 0 rgba(0,0,0,0.05);
+            width: 100%;
+            justify-content: center;
         }
 
         .user-pill-dot {
-            width: 7px;
-            height: 7px;
-            border-radius: 999px;
-            background: #ff6fa8;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
         }
 
+        .user-card:nth-child(5n+1) .user-pill-dot { background: var(--c-red); }
+        .user-card:nth-child(5n+2) .user-pill-dot { background: var(--c-yellow); }
+        .user-card:nth-child(5n+3) .user-pill-dot { background: var(--c-green); }
+        .user-card:nth-child(5n+4) .user-pill-dot { background: var(--c-blue); }
+        .user-card:nth-child(5n+5) .user-pill-dot { background: var(--c-purple); }
+
         .footer-note {
-            margin-top: 0.5rem;
-            font-size: 0.72rem;
+            margin-top: 1rem;
+            font-size: 0.8rem;
             text-align: center;
-            color: #9a6a86;
+            color: #666;
+            font-weight: 600;
         }
 
         /* EDIT PANEL */
         .edit-panel-backdrop {
             position: fixed;
             inset: 0;
-            background: rgba(54, 7, 34, 0.45);
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(5px);
             display: none;
             align-items: center;
             justify-content: center;
@@ -408,197 +408,182 @@
         .edit-panel-backdrop.show { display: flex; }
 
         .edit-panel {
-            width: 100%;
-            max-width: 420px;
-            background: #fff5fb;
-            border-radius: 20px;
-            border: 1px solid #ffc9e4;
-            box-shadow: 0 20px 48px rgba(112, 16, 61, 0.45);
-            padding: 16px 16px 14px;
+            width: 90%;
+            max-width: 400px;
+            background: #fff;
+            border-radius: 24px;
+            border: 4px solid var(--c-purple);
+            box-shadow: 0 20px 0 rgba(0,0,0,0.2);
+            padding: 20px;
+            transform: rotate(-1deg);
         }
 
         .edit-panel-title {
-            font-size: 1rem;
-            font-weight: 700;
-            color: #3a1830;
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.4rem;
+            color: var(--c-purple);
             margin-bottom: 0.2rem;
+            text-align: center;
         }
 
         .edit-panel-sub {
-            font-size: 0.8rem;
-            color: #85556e;
-            margin-bottom: 0.7rem;
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 1rem;
+            text-align: center;
         }
 
         .edit-users-list {
-            max-height: 260px;
+            max-height: 250px;
             overflow-y: auto;
-            padding-right: 4px;
-            margin-bottom: 0.7rem;
-        }
-
-        .edit-users-list::-webkit-scrollbar { width: 6px; }
-        .edit-users-list::-webkit-scrollbar-thumb {
-            background: #ff9cc7;
-            border-radius: 999px;
+            padding: 5px;
+            margin-bottom: 1rem;
         }
 
         .edit-row {
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            margin-bottom: 0.45rem;
+            margin-bottom: 0.5rem;
         }
 
         .edit-label {
-            font-size: 0.78rem;
-            font-weight: 600;
-            color: #7b3259;
-            width: 68px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--dark-text);
+            width: 80px;
             flex-shrink: 0;
         }
 
         .edit-input {
             flex: 1;
-            border-radius: 999px;
-            border: 1px solid #ffc0df;
-            padding: 0.32rem 0.7rem;
-            font-size: 0.8rem;
+            border-radius: 12px;
+            border: 2px solid #ddd;
+            padding: 0.5rem;
+            font-size: 0.9rem;
             outline: none;
-            background: #fff;
+            font-family: 'Nunito', sans-serif;
+            font-weight: 600;
         }
 
         .edit-input:focus {
-            border-color: #ff6fa8;
-            box-shadow: 0 0 0 2px rgba(255, 152, 203, 0.4);
+            border-color: var(--c-blue);
         }
 
         .edit-actions {
             display: flex;
-            justify-content: flex-end;
-            gap: 0.5rem;
-            margin-top: 0.1rem;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 0.5rem;
         }
 
         .btn-ghost {
             border-radius: 999px;
-            border: 1px solid #e3b6cf;
+            border: 2px solid #ddd;
             background: transparent;
-            padding: 0.35rem 0.9rem;
-            font-size: 0.8rem;
+            padding: 0.5rem 1.5rem;
+            font-size: 0.9rem;
+            font-weight: 700;
             cursor: pointer;
-            color: #814461;
+            color: #666;
         }
 
         .btn-primary {
             border-radius: 999px;
             border: none;
-            background: linear-gradient(135deg, #ff6fa8, #ff93c0);
-            padding: 0.38rem 1.1rem;
-            font-size: 0.8rem;
+            background: var(--c-green);
+            padding: 0.5rem 1.5rem;
+            font-size: 0.9rem;
             cursor: pointer;
-            font-weight: 600;
+            font-weight: 700;
             color: #fff;
-            box-shadow: 0 7px 16px rgba(223, 88, 146, 0.6);
+            box-shadow: 0 4px 0 #6aa315;
         }
 
-        .btn-primary:hover { filter: brightness(1.03); }
+        .btn-primary:active {
+            transform: translateY(4px);
+            box-shadow: none;
+        }
 
-        /* FAIRY DUST POINTER */
-        .fairy-dust {
+        /* PAINT DROP CURSOR & SPLASH */
+        .paint-drop {
             position: fixed;
             pointer-events: none;
-            width: 8px;
-            height: 8px;
+            width: 12px;
+            height: 12px;
             border-radius: 50%;
-            background: white;
-            box-shadow: 0 0 10px #ff6fa8, 0 0 20px #ff94c1;
-            animation: fadeOut 1s forwards;
+            animation: shrinkFade 0.8s forwards;
             z-index: 9999;
         }
 
-        @keyframes fadeOut {
+        .paint-splash {
+            position: fixed;
+            pointer-events: none;
+            width: 60px;
+            height: 60px;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='%23FF0066' d='M44.7,-76.4C58.9,-69.2,71.8,-59.1,81.6,-46.6C91.4,-34.1,98.2,-19.2,95.8,-5.2C93.4,8.9,81.8,22.1,70.8,33.4C59.8,44.7,49.4,54.1,37.7,62.8C26,71.5,13,79.5,-0.6,80.5C-14.2,81.5,-28.4,75.5,-40.5,67.2C-52.6,58.9,-62.6,48.3,-71.3,36.2C-80,24.1,-87.4,10.5,-85.9,-2.4C-84.4,-15.3,-74,-27.5,-63.3,-37.9C-52.6,-48.3,-41.6,-56.9,-29.9,-65.4C-18.2,-73.9,-5.8,-82.3,4.9,-90.8L15.6,-99.3' transform='translate(100 100)' /%3E%3C/svg%3E");
+            background-size: contain;
+            background-repeat: no-repeat;
+            opacity: 0.8;
+            transform: translate(-50%, -50%) scale(0);
+            animation: splashAnim 0.6s ease-out forwards;
+            z-index: 9998;
+        }
+
+        @keyframes shrinkFade {
             0% { transform: scale(1); opacity: 1; }
-            100% { transform: scale(0); opacity: 0; }
+            100% { transform: scale(0.2); opacity: 0; }
         }
 
-        /* BACKGROUND FLOATING BUBBLES */
-        .floating-bubble {
-            position: absolute;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.3);
-            box-shadow: 0 0 15px rgba(255, 182, 212, 0.2);
-            z-index: 0;
-            animation: floatUp linear infinite;
+        @keyframes splashAnim {
+            0% { transform: translate(-50%, -50%) scale(0); opacity: 0.8; }
+            50% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.8; }
+            100% { transform: translate(-50%, -50%) scale(1); opacity: 0; }
         }
 
-        @keyframes floatUp {
-            0% { transform: translateY(100vh) scale(0); opacity: 0; }
-            20% { opacity: 0.6; }
-            80% { opacity: 0.6; }
-            100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
-        }
-
-        /* ANIMASI KEYFRAMES */
+        /* ANIMATIONS */
         @keyframes popIn {
-            0% {
-                opacity: 0;
-                transform: translateY(18px) scale(0.9);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
+            0% { opacity: 0; transform: scale(0.5); }
+            100% { opacity: 1; transform: scale(1); }
         }
 
-        @keyframes floatGlow {
-            0% {
-                box-shadow: 0 9px 18px rgba(225,103,157,0.40);
-            }
-            50% {
-                box-shadow:
-                    0 12px 24px rgba(225,103,157,0.55),
-                    0 0 14px rgba(255,130,190,0.45);
-            }
-            100% {
-                box-shadow: 0 9px 18px rgba(225,103,157,0.40);
-            }
+        /* Floating Blobs */
+        .floating-blob {
+            position: absolute;
+            opacity: 0.3;
+            z-index: 0;
+            animation: floatBlob infinite alternate ease-in-out;
+            pointer-events: none;
         }
 
-        @keyframes ripple {
-            0% {
-                transform: translate(-50%, -50%) scale(0);
-                opacity: 0.7;
-            }
-            100% {
-                transform: translate(-50%, -50%) scale(18);
-                opacity: 0;
-            }
+        @keyframes floatBlob {
+            from { transform: translateY(0) rotate(0deg); }
+            to { transform: translateY(-30px) rotate(10deg); }
         }
 
         @media (max-width: 640px) {
-            .app-shell { padding: 20px 14px 18px; }
-            .welcome-title { font-size: 1.8rem; }
-            .main-title { font-size: 1.35rem; }
+            .welcome-title { font-size: 2rem; }
+            .main-title { font-size: 1.5rem; }
+            .user-card { min-height: 100px; }
         }
     </style>
 </head>
 <body>
-    <!-- Tombol Edit User di pojok kanan atas -->
+    <!-- Edit Button -->
     <button id="edit-users-btn" type="button">
         <span class="edit-btn-icon">✎</span>
-        <span>Edit Nama User</span>
+        <span>Edit</span>
     </button>
 
     <div class="max-w-md mx-auto app-shell">
         <!-- WELCOME PAGE -->
         <div id="welcome-page" class="fade-transition" style="opacity: 1;">
-            <div class="welcome-tag">WELCOME TO</div>
-            <h1 class="welcome-title">Acorn Consultant<br>Project Shankara</h1>
+            <div class="welcome-tag">WELCOME TO THE</div>
+            <h1 class="welcome-title">PAINT WORLD<br>Shankara</h1>
             <p class="welcome-sub">
-                Project Shankara • Akses survey terorganisir untuk setiap user.
+                Color your survey journey.
             </p>
-            <button id="start-btn">PRESS START TO CONTINUE</button>
+            <button id="start-btn">ENTER WORLD</button>
         </div>
 
         <!-- MAIN VIEW -->
@@ -607,7 +592,7 @@
                 <div class="main-pill">
                     <span>Project SHANKARA</span>
                 </div>
-                <h1 class="main-title">User Survey Panel</h1>
+                <h1 class="main-title">Survey Canvas</h1>
                 <div id="daily-affirmation" class="daily-affirmation"></div>
                 <div class="datetime-wrapper">
                     <div class="datetime">
@@ -619,37 +604,36 @@
 
             <div class="top-actions">
                 <div class="info-text">
-                    <span class="info-dot"></span>
-                    <span>Tap kartu user untuk membuka link survey</span>
+                    <span>🎨 Click a card to start painting!</span>
                 </div>
             </div>
 
             <div id="users-grid" class="users-grid"></div>
 
             <div class="footer-note">
-                Good luck!!!.
+                Let's make it colorful!
             </div>
         </div>
     </div>
 
-    <!-- MODAL EDIT NAMA USER -->
+    <!-- EDIT MODAL -->
     <div id="edit-panel-backdrop" class="edit-panel-backdrop">
         <div class="edit-panel">
-            <div class="edit-panel-title">Edit Nama User</div>
+            <div class="edit-panel-title">Edit Artists</div>
             <div class="edit-panel-sub">
-                Gunakan untuk mengganti label <strong>User 1 – User 10</strong> sesuai kebutuhan.
+                Rename the users below.
             </div>
             <div id="edit-users-list" class="edit-users-list"></div>
             <div class="edit-actions">
-                <button id="edit-cancel" class="btn-ghost" type="button">Batal</button>
-                <button id="edit-save" class="btn-primary" type="button">Simpan</button>
+                <button id="edit-cancel" class="btn-ghost" type="button">Cancel</button>
+                <button id="edit-save" class="btn-primary" type="button">Save</button>
             </div>
         </div>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const SURVEY_LINK = "https://sv-cn.c-netr.com/op_m/?key=wUnC6NMG";
+            const SURVEY_LINK = "https://live.choiceform.cc/?Ug1ojCnX";
             const PASSWORD_EDIT = "Aco123";
 
             const welcomePage = document.getElementById('welcome-page');
@@ -664,23 +648,21 @@
             const editCancel = document.getElementById('edit-cancel');
             const editSave = document.getElementById('edit-save');
 
-            // Data user default
-            const users = [];
-            const defaultNames = [
-                "Vitri", "Griselda", "Sri Suwarti", "Grace", "Diana Yusnita", 
-                "Lila", "Windy", "Fetty", "Erni", "Romlah"
-            ];
+            // Default Data (7 Users)
+            const defaultNames = ["Sulastri", "Suwarti", "Rondang", "Fitri", "Grace", "Yohana Ami", "Lila"];
+            let users = [];
 
-            for (let i = 0; i < 10; i++) {
-                const id = `user${String(i + 1).padStart(2, '0')}`;
+            // Initialize users
+            for (let i = 0; i < defaultNames.length; i++) {
                 users.push({
-                    id,
+                    id: `user_${i}`, // Simple ID
                     name: defaultNames[i]
                 });
             }
 
-            // Load custom nama dari localStorage (v2 to reset defaults)
-            const storedNames = JSON.parse(localStorage.getItem('ShankaraUserNames_v2') || '{}');
+            // Load custom names from localStorage (v3)
+            // Using a new key to ensure we don't load old v2 data which had 10 users and different defaults
+            const storedNames = JSON.parse(localStorage.getItem('ShankaraUserNames_v3') || '{}');
             if (storedNames && typeof storedNames === 'object') {
                 users.forEach(u => {
                     if (storedNames[u.id]) {
@@ -689,26 +671,26 @@
                 });
             }
 
-            // Render kartu user
+            // Render User Grid
             function renderUserGrid() {
                 usersGrid.innerHTML = '';
                 users.forEach((user, index) => {
                     const btn = document.createElement('button');
                     btn.type = 'button';
                     btn.className = 'user-card';
-                    btn.style.setProperty('--stagger', (index * 0.08) + 's');
+                    btn.style.setProperty('--stagger', (index * 0.1) + 's');
 
                     btn.innerHTML = `
                         <div class="user-card-header">
-                            <div class="user-badge">#${index + 1}</div>
-                            <div style="text-align:right;">
+                            <div class="user-badge">${index + 1}</div>
+                            <div>
                                 <div class="user-name" title="${user.name}">${user.name}</div>
-                                <div class="user-sub">Survey Shankara</div>
+                                <div class="user-sub">Artist</div>
                             </div>
                         </div>
                         <div class="user-pill">
                             <span class="user-pill-dot"></span>
-                            <span>Buka link survey</span>
+                            <span>Start Survey</span>
                         </div>
                     `;
 
@@ -720,7 +702,7 @@
                 });
             }
 
-            // Update datetime (Asia/Jakarta)
+            // DateTime
             function updateDateTime() {
                 const now = new Date();
                 const options = {
@@ -736,11 +718,12 @@
                 datetimeText.textContent = now.toLocaleString('id-ID', options);
             }
 
-            // Transisi dari welcome ke main
+            // Transition
             startBtn.addEventListener('click', () => {
-                // Confetti Explosion
+                // Confetti Explosion (Colorful)
                 const duration = 2000;
                 const end = Date.now() + duration;
+                const colors = ['#FF595E', '#FFCA3A', '#8AC926', '#1982C4', '#6A4C93'];
 
                 (function frame() {
                     confetti({
@@ -748,29 +731,20 @@
                         angle: 60,
                         spread: 55,
                         origin: { x: 0 },
-                        colors: ['#ff6fa8', '#ff94c1', '#ffd1e4']
+                        colors: colors
                     });
                     confetti({
                         particleCount: 7,
                         angle: 120,
                         spread: 55,
                         origin: { x: 1 },
-                        colors: ['#ff6fa8', '#ff94c1', '#ffd1e4']
+                        colors: colors
                     });
 
                     if (Date.now() < end) {
                         requestAnimationFrame(frame);
                     }
                 }());
-
-                setTimeout(() => {
-                    confetti({
-                        particleCount: 100,
-                        spread: 100,
-                        origin: { y: 0.6 },
-                        colors: ['#ff6fa8', '#e04584', '#ffffff']
-                    });
-                }, 300);
 
                 welcomePage.style.opacity = '0';
                 setTimeout(() => {
@@ -782,12 +756,12 @@
                 }, 400);
             });
 
-            // Buka panel edit (dengan password)
+            // Edit Panel
             editBtn.addEventListener('click', () => {
-                const pwd = prompt('Masukkan password untuk mengedit nama user:');
+                const pwd = prompt('Enter password to edit names:');
                 if (pwd === null) return;
                 if (pwd !== PASSWORD_EDIT) {
-                    alert('Password salah.');
+                    alert('Wrong password.');
                     return;
                 }
                 openEditPanel();
@@ -805,7 +779,7 @@
                             class="edit-input"
                             data-id="${user.id}"
                             value="${user.name}"
-                            maxlength="30"
+                            maxlength="20"
                         />
                     `;
                     editUsersList.appendChild(row);
@@ -823,15 +797,16 @@
                 inputs.forEach(input => {
                     const id = input.getAttribute('data-id');
                     let value = input.value.trim();
+                    // Fallback to default if empty
                     if (!value) {
-                        const index = users.findIndex(u => u.id === id);
-                        value = defaultNames[index];
-                        input.value = value;
+                         // Find index to get default name
+                        const idx = parseInt(id.split('_')[1]);
+                        value = defaultNames[idx];
                     }
                     newNames[id] = value;
                 });
 
-                localStorage.setItem('ShankaraUserNames_v2', JSON.stringify(newNames));
+                localStorage.setItem('ShankaraUserNames_v3', JSON.stringify(newNames));
                 users.forEach(u => {
                     if (newNames[u.id]) {
                         u.name = newNames[u.id];
@@ -842,25 +817,24 @@
                 editBackdrop.classList.remove('show');
             });
 
-            // Tutup panel kalau klik di luar box
             editBackdrop.addEventListener('click', (e) => {
                 if (e.target === editBackdrop) {
                     editBackdrop.classList.remove('show');
                 }
             });
 
-            // Daily Affirmations
+            // Affirmations
             const affirmations = [
-                "You are capable of amazing things.",
-                "Your potential is endless.",
-                "Radiate positivity today.",
-                "You are strong, confident, and unstoppable.",
-                "Believe in yourself and all that you are.",
-                "Today is a beautiful day to be alive.",
-                "You are enough, just as you are.",
-                "Embrace the magic within you.",
-                "Your smile lights up the world.",
-                "You are creating a life you love."
+                "Paint your own reality.",
+                "Life is a great big canvas.",
+                "Throw some color on it!",
+                "Creativity takes courage.",
+                "Every day is a fresh start.",
+                "You are a masterpiece.",
+                "Live life in full color.",
+                "Dream in colors.",
+                "Be a rainbow in someone's cloud.",
+                "Make today amazing."
             ];
 
             function setDailyAffirmation() {
@@ -869,48 +843,63 @@
                 affirmationEl.textContent = `“${randomAffirmation}”`;
             }
 
-            // Fairy Dust Cursor
+            // Paint Drop Cursor Effect
+            const colors = ['#FF595E', '#FFCA3A', '#8AC926', '#1982C4', '#6A4C93'];
             document.addEventListener('mousemove', (e) => {
-                const dust = document.createElement('div');
-                dust.classList.add('fairy-dust');
-                dust.style.left = e.pageX + 'px';
-                dust.style.top = e.pageY + 'px';
-                
-                // Randomize color slightly
-                const colors = ['#ff6fa8', '#ffd1e4', '#ffffff', '#fff5fb'];
-                dust.style.background = colors[Math.floor(Math.random() * colors.length)];
-                
-                document.body.appendChild(dust);
-                
-                setTimeout(() => {
-                    dust.remove();
-                }, 1000);
+                if (Math.random() > 0.8) { // Don't drop every frame
+                    const drop = document.createElement('div');
+                    drop.classList.add('paint-drop');
+                    drop.style.left = e.clientX + 'px';
+                    drop.style.top = e.clientY + 'px';
+                    drop.style.background = colors[Math.floor(Math.random() * colors.length)];
+                    document.body.appendChild(drop);
+
+                    setTimeout(() => drop.remove(), 800);
+                }
             });
 
-            // Floating Bubbles Background
-            function createBubbles() {
-                const bubbleCount = 15;
-                for (let i = 0; i < bubbleCount; i++) {
-                    const bubble = document.createElement('div');
-                    bubble.classList.add('floating-bubble');
-                    
-                    const size = Math.random() * 60 + 20;
-                    bubble.style.width = size + 'px';
-                    bubble.style.height = size + 'px';
-                    
-                    bubble.style.left = Math.random() * 100 + 'vw';
-                    bubble.style.animationDuration = (Math.random() * 10 + 10) + 's';
-                    bubble.style.animationDelay = (Math.random() * 5) + 's';
-                    
-                    document.body.appendChild(bubble);
+            // Paint Splash on Click
+            document.addEventListener('click', (e) => {
+                // Avoid splashing when clicking buttons (optional, but looks fun if everywhere)
+                const splash = document.createElement('div');
+                splash.classList.add('paint-splash');
+                splash.style.left = e.clientX + 'px';
+                splash.style.top = e.clientY + 'px';
+
+                // Randomize color of SVG using filter or inline SVG manipulation
+                // Simplified: use random CSS filter to rotate hue
+                const hueRotate = Math.floor(Math.random() * 360);
+                splash.style.filter = `hue-rotate(${hueRotate}deg)`;
+
+                document.body.appendChild(splash);
+                setTimeout(() => splash.remove(), 600);
+            });
+
+            // Random Floating Blobs Background
+            function createBlobs() {
+                const blobCount = 6;
+                const blobColors = ['#FF595E', '#FFCA3A', '#8AC926', '#1982C4', '#6A4C93'];
+
+                for(let i=0; i<blobCount; i++) {
+                    const blob = document.createElement('div');
+                    blob.classList.add('floating-blob');
+                    const size = Math.random() * 100 + 50;
+                    blob.style.width = size + 'px';
+                    blob.style.height = size + 'px';
+                    blob.style.borderRadius = `${Math.random()*50+30}% ${Math.random()*50+30}% ${Math.random()*50+30}% ${Math.random()*50+30}% / ${Math.random()*50+30}% ${Math.random()*50+30}% ${Math.random()*50+30}% ${Math.random()*50+30}%`;
+                    blob.style.background = blobColors[i % blobColors.length];
+                    blob.style.left = Math.random() * 90 + 'vw';
+                    blob.style.top = Math.random() * 90 + 'vh';
+                    blob.style.animationDuration = (Math.random() * 10 + 10) + 's';
+                    document.body.appendChild(blob);
                 }
             }
 
-            // Inisialisasi
+            // Init
             renderUserGrid();
             updateDateTime();
             setDailyAffirmation();
-            createBubbles();
+            createBlobs();
             setInterval(updateDateTime, 1000);
         });
     </script>
